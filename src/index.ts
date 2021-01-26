@@ -1,5 +1,13 @@
-import path from "path";
+import { Command, program } from "commander";
+import pkg from "../package.json";
+import { checkNodeVersion } from "./utils/versionChecker";
+import addInitCommand from "./utils/addInitCommand";
 
-console.log(path.resolve(__dirname, ".."));
+checkNodeVersion();
 
-export default "lib";
+program.name(pkg.name);
+program.version(pkg.version, "-v, --version", "output the cli version");
+
+addInitCommand(program as Command);
+
+program.parse(process.argv);

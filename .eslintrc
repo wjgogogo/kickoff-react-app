@@ -15,7 +15,26 @@
 		"sourceType": "module"
 	},
 	"plugins": ["@typescript-eslint"],
+	"settings": {
+		"import/extensions": [".ts", ".js", ".json"],
+		"import/resolver": {
+			"node": {
+				"extensions": [".ts", ".js", ".json"]
+			}
+		}
+	},
 	"rules": {
-		"no-console": "off"
+		"no-shadow": "off",
+		"no-console": "off",
+		"import/prefer-default-export": "off",
+		"@typescript-eslint/ban-ts-comment": "off",
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"js": "never",
+				"ts": "never"
+			}
+		]
 	}
 }
