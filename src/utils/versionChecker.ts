@@ -2,7 +2,7 @@ import semver from "semver";
 import chalk from "chalk";
 import pkg from "../../package.json";
 
-export const checkNodeVersion = () => {
+export const checkNodeVersion = (): void => {
 	const nodeVersion = process.version;
 	const range = pkg.engines.node;
 	const result = semver.satisfies(nodeVersion, range);

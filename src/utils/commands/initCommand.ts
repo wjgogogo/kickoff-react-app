@@ -1,17 +1,22 @@
 import { Command } from "commander";
 import chalk from "chalk";
-import checkProjectName from "./projectNameChecker";
+import checkProjectName from "../projectNameChecker";
 
 enum TemplateType {
-	DEFAULT = "default",
-	DEFAULT_TS = "default-ts",
+	DEFAULT_JS = "js",
+	DEFAULT_TS = "ts",
 }
 
-const TEMPLATES = [
-	{ type: TemplateType.DEFAULT as string, features: ["react17", "babel"] },
+export const TEMPLATES = [
+	{
+		type: TemplateType.DEFAULT_JS as string,
+		description:
+			"Js version with react17, babel(without test, lint and prettier)",
+	},
 	{
 		type: TemplateType.DEFAULT_TS as string,
-		features: ["react17", "babel", "typescript"],
+		description:
+			"Ts version with react17, typescript and babel(without test, lint and prettier)",
 	},
 ] as const;
 
@@ -29,17 +34,17 @@ const checkTemplateType = (template: string) => {
 export default (program: Command): void => {
 	program
 		.command("init <project-name>")
-		.description(`quick generator a project from template.`)
+		.description(`quick generator a project from template`)
 		.option(
 			"-t, --template <template-type>",
 			`the option can be one of:\n` +
 				`    - ${chalk.blue(TEMPLATES[0].type)} [${chalk.yellow(
-					TEMPLATES[0].features
+					TEMPLATES[0].description
 				)}]\n` +
 				`    - ${chalk.blue(TEMPLATES[1].type)} [${chalk.yellow(
-					TEMPLATES[1].features
+					TEMPLATES[1].description
 				)}]`,
-			TemplateType.DEFAULT
+			TemplateType.DEFAULT_JS
 		)
 		.action((projectName: string, options: { template: TemplateType }) => {
 			checkProjectName(projectName);
