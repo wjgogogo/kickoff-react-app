@@ -1,43 +1,11 @@
 import inquirer, { QuestionCollection } from "inquirer";
-import { TEMPLATES } from "./commands/initCommand";
-
-const PRESET_PROMPT: QuestionCollection<{ preset: "ts" | "js" | "manual" }> = [
-	{
-		name: "preset",
-		type: "list",
-		message: "Please pick a preset:",
-		choices: [
-			...TEMPLATES.map(t => ({ name: t.description, value: t.type })),
-			{
-				name: "Manually select features",
-				value: "manual",
-			},
-		],
-	},
-];
 
 const FEATURES_PROMPT: QuestionCollection<{
-	language: string;
 	css: string;
 	jest: boolean;
 	lint: boolean;
 	hook: boolean;
 }> = [
-	{
-		name: "language",
-		type: "list",
-		message: "Choose a language for your project:",
-		choices: [
-			{
-				name: "Javascript",
-				value: "js",
-			},
-			{
-				name: "Typescript",
-				value: "ts",
-			},
-		],
-	},
 	{
 		name: "css",
 		type: "list",
@@ -82,11 +50,6 @@ const FEATURES_PROMPT: QuestionCollection<{
 ];
 
 export const create = async () => {
-	const answer1 = await inquirer.prompt(PRESET_PROMPT);
-	if (answer1.preset === "manual") {
-		const answer2 = await inquirer.prompt(FEATURES_PROMPT);
-		console.log(answer2);
-	}
-
-	console.log(answer1);
+	const answer2 = await inquirer.prompt(FEATURES_PROMPT);
+	console.log(answer2);
 };

@@ -1,8 +1,7 @@
 import { Command, program } from "commander";
 import pkg from "../package.json";
-import { checkNodeVersion } from "./utils/versionChecker";
-import addInitCommand from "./utils/commands/initCommand";
-import addCreateCommand from "./utils/commands/createCommand";
+import { checkNodeVersion } from "./utils/checkers";
+import { addCreateCommand, addInitCommand } from "./utils/commands";
 
 checkNodeVersion();
 
