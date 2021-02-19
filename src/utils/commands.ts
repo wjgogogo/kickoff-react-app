@@ -1,16 +1,17 @@
 import { Command } from "commander";
-
-import { checkProjectName } from "./checkers";
-import { create, useCreateInquirer } from "./inquirers";
+import {
+	create,
+	useCreateInquirer,
+	useProjectNameValidationInquirer,
+} from "./inquirers";
 
 export const addCreateCommand = (program: Command): void => {
 	program
 		.command("create <project-name>")
 		.description(`create project interactively`)
-		.action((projectName: string) => {
-			checkProjectName(projectName);
-			console.log("success:", projectName);
-			useCreateInquirer(projectName);
+		.action(async (projectName: string) => {
+			const name = await useProjectNameValidationInquirer(projectName);
+			await useCreateInquirer(name);
 		});
 };
 
@@ -18,9 +19,8 @@ export const addInitCommand = (program: Command): void => {
 	program
 		.command("init <project-name>")
 		.description(`quick generator a project from template`)
-		.action((projectName: string) => {
-			checkProjectName(projectName);
-			console.log("success:", projectName);
-			create(projectName);
+		.action(async (projectName: string) => {
+			const name = await useProjectNameValidationInquirer(projectName);
+			await create(name);
 		});
 };

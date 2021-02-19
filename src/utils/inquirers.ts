@@ -1,6 +1,10 @@
 import inquirer from "inquirer";
 import { downloadRepo } from "./downloadRepo";
 import { customizeTemplate } from "./customizeTemplate";
+import { commitProject } from "./git";
+import { checkProjectName } from "./checkers";
+import * as fs from "fs";
+import validate from "validate-npm-package-name";
 
 export interface Options {
 	css: "emotionjs" | "less" | "none";
@@ -21,6 +25,7 @@ export const create = async (
 		process.exit(1);
 	}
 	customizeTemplate(projectPath, projectName, options);
+	commitProject(projectPath);
 };
 
 export const useCreateInquirer = async (projectName: string) => {
@@ -55,14 +60,14 @@ export const useCreateInquirer = async (projectName: string) => {
 		{
 			name: "lint",
 			type: "confirm",
-			message: "Do you wanna add lint and prettier in your project",
+			message: "Do you wanna add lint and prettier in your project?",
 			default: true,
 		},
 		{
 			name: "hook",
 			type: "confirm",
 			message:
-				"Do you wanna add pre-commit git hook to format your code in your project",
+				"Do you wanna add pre-commit git hook to format your code in your project?",
 			when: answer => answer.lint,
 			default: true,
 		},
@@ -70,49 +75,34 @@ export const useCreateInquirer = async (projectName: string) => {
 	create(projectName, options);
 };
 
-export const useA = async (projectName: string) => {
+export const useProjectNameValidationInquirer = async (projectName: string) => {
+	checkProjectName(projectName);
+
+	if (!fs.existsSync(`${process.cwd()}/${projectName}`)) {
+		return;
+	}
 	const options = await inquirer.prompt([
 		{
-			name: "css",
-			type: "list",
-			message:
-				"Choose a CSS pre-processor(PostCSS, Autoprefixer are supported by default):",
-			choices: [
-				{
-					name: "Less",
-					value: "less",
-				},
-				{
-					name: "@Emotion(CSS in JS)",
-					value: "emotionjs",
-				},
-				{
-					name: "None",
-					value: "none",
-				},
-			],
+			name: "override",
+			type: "confirm",
+			message: `Do you wanna override existed project (${projectName} is exist) ?`,
+			default: false,
 		},
 		{
-			name: "unitTest",
-			type: "confirm",
+			name: "name",
+			type: "text",
 			message:
-				"Do you wanna add jest and @testing-library/react in your project?",
-			default: true,
-		},
-		{
-			name: "lint",
-			type: "confirm",
-			message: "Do you wanna add lint and prettier in your project",
-			default: true,
-		},
-		{
-			name: "hook",
-			type: "confirm",
-			message:
-				"Do you wanna add pre-commit git hook to format your code in your project",
-			when: answer => answer.lint,
-			default: true,
+				"Please input new project name (make sure name is valid and doesn't exist, otherwise we won't pass this question) :",
+			default: projectName,
+			when: answer => !answer.override,
+			validate(name: string) {
+				const result = validate(name);
+				return (
+					result.validForNewPackages &&
+					!fs.existsSync(`${process.cwd()}/${name}`)
+				);
+			},
 		},
 	]);
-	create(projectName, options);
+	return options.name;
 };

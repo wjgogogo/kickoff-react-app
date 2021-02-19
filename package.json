@@ -7,6 +7,10 @@
 		"start": "ts-node src/index.ts",
 		"build": "tsc"
 	},
+	"bin": {
+		"kickoff-react-app": "./bin/kra",
+		"kra": "./bin/kra"
+	},
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged",
