@@ -20,6 +20,6 @@ module.exports = {
   moduleNameMapper: {
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$":
       "<rootDir>/tests/mocks/fileMock.ts",
-    "\\.(css)$": "<rootDir>/tests/mocks/styleMock.ts",
+    "\\.(css|less)$": "<rootDir>/tests/mocks/styleMock.ts",
   },
 };
