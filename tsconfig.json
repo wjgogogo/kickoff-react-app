@@ -4,9 +4,9 @@
 		"lib": ["ESNext"],
 		"esModuleInterop": true,
 		"moduleResolution": "Node",
-		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"module": "CommonJS",
+		"rootDir": "src",
 		"outDir": "lib"
 	},
 	"include": ["src"]

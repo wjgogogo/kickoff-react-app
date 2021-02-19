@@ -1,13 +1,13 @@
 import { Command, program } from "commander";
-import pkg from "../package.json";
 import { checkGitVersion, checkNodeVersion } from "./utils/checkers";
 import { addCreateCommand, addInitCommand } from "./utils/commands";
+import { CLI_NAME, CLI_VERSION } from "./constants";
 
 checkNodeVersion();
 checkGitVersion();
 
-program.name(pkg.name);
-program.version(pkg.version, "-v, --version", "output the cli version");
+program.name(CLI_NAME);
+program.version(CLI_VERSION, "-v, --version", "output the cli version");
 program.usage("<command> [options]");
 
 addInitCommand(program as Command);

@@ -3,8 +3,7 @@ import chalk from "chalk";
 import { execSync } from "child_process";
 
 import semver from "semver";
-import pkg from "../../package.json";
-import { GIT_VERSION_RANGE } from "../constants";
+import { GIT_VERSION_RANGE, NODE_VERSION_RANGE } from "../constants";
 
 export const checkProjectName = (projectName: string) => {
 	const result = validate(projectName);
@@ -23,7 +22,7 @@ export const checkProjectName = (projectName: string) => {
 
 export const checkNodeVersion = (): void => {
 	const nodeVersion = process.version;
-	const range = pkg.engines.node;
+	const range = NODE_VERSION_RANGE;
 	const result = semver.satisfies(nodeVersion, range);
 
 	if (!result) {
