@@ -2,6 +2,7 @@ import { Command } from "commander";
 import {
 	create,
 	useCreateInquirer,
+	useInstallInquirer,
 	useProjectNameValidationInquirer,
 } from "./inquirers";
 
@@ -12,6 +13,7 @@ export const addCreateCommand = (program: Command): void => {
 		.action(async (projectName: string) => {
 			const name = await useProjectNameValidationInquirer(projectName);
 			await useCreateInquirer(name);
+			await useInstallInquirer(name);
 		});
 };
 
@@ -22,5 +24,6 @@ export const addInitCommand = (program: Command): void => {
 		.action(async (projectName: string) => {
 			const name = await useProjectNameValidationInquirer(projectName);
 			await create(name);
+			await useInstallInquirer(name);
 		});
 };

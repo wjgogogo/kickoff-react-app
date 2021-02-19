@@ -13,3 +13,13 @@ export const commitProject = (projectPath: string) => {
 		);
 	}
 };
+
+export const installDependencies = (projectPath: string) => {
+	try {
+		execSync(`cd ${projectPath} && npm install`);
+	} catch (error) {
+		console.log(
+			chalk.yellow(`failed to install dependencies, you can try later.`)
+		);
+	}
+};

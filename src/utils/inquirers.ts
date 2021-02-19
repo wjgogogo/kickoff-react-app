@@ -1,7 +1,7 @@
 import inquirer from "inquirer";
 import { downloadRepo } from "./downloadRepo";
 import { customizeTemplate } from "./customizeTemplate";
-import { commitProject } from "./git";
+import { commitProject, installDependencies } from "./exec";
 import { checkProjectName } from "./checkers";
 import * as fs from "fs";
 import validate from "validate-npm-package-name";
@@ -13,19 +13,39 @@ export interface Options {
 	hook: boolean;
 }
 
-export const create = async (
-	projectName: string,
-	options: Options = { css: "none", unitTest: false, lint: false, hook: false }
-) => {
-	const projectPath = `${process.cwd()}/${projectName}`;
-	try {
-		await downloadRepo(projectPath);
-	} catch (error) {
-		console.error(error);
-		process.exit(1);
+export const getProjectPath = (projectName: string) => {
+	return `${process.cwd()}/${projectName}`;
+};
+
+export const useProjectNameValidationInquirer = async (projectName: string) => {
+	checkProjectName(projectName);
+
+	if (!fs.existsSync(getProjectPath(projectName))) {
+		return projectName;
 	}
-	customizeTemplate(projectPath, projectName, options);
-	commitProject(projectPath);
+	const options = await inquirer.prompt([
+		{
+			name: "override",
+			type: "confirm",
+			message: `Do you wanna override existed project (${projectName} is exist) ?`,
+			default: false,
+		},
+		{
+			name: "name",
+			type: "text",
+			message:
+				"Please input new project name (make sure name is valid and doesn't exist, otherwise we won't pass this question) :",
+			default: projectName,
+			when: answer => !answer.override,
+			validate(name: string) {
+				const result = validate(name);
+				return (
+					result.validForNewPackages && !fs.existsSync(getProjectPath(name))
+				);
+			},
+		},
+	]);
+	return options.name;
 };
 
 export const useCreateInquirer = async (projectName: string) => {
@@ -72,37 +92,34 @@ export const useCreateInquirer = async (projectName: string) => {
 			default: true,
 		},
 	]);
-	create(projectName, options);
+	await create(projectName, options);
 };
 
-export const useProjectNameValidationInquirer = async (projectName: string) => {
-	checkProjectName(projectName);
-
-	if (!fs.existsSync(`${process.cwd()}/${projectName}`)) {
-		return;
+export const create = async (
+	projectName: string,
+	options: Options = { css: "none", unitTest: false, lint: false, hook: false }
+) => {
+	const projectPath = getProjectPath(projectName);
+	try {
+		await downloadRepo(projectPath);
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
 	}
+	customizeTemplate(projectPath, projectName, options);
+	commitProject(projectPath);
+};
+
+export const useInstallInquirer = async (projectName: string) => {
 	const options = await inquirer.prompt([
 		{
-			name: "override",
+			name: "install",
 			type: "confirm",
-			message: `Do you wanna override existed project (${projectName} is exist) ?`,
-			default: false,
-		},
-		{
-			name: "name",
-			type: "text",
-			message:
-				"Please input new project name (make sure name is valid and doesn't exist, otherwise we won't pass this question) :",
-			default: projectName,
-			when: answer => !answer.override,
-			validate(name: string) {
-				const result = validate(name);
-				return (
-					result.validForNewPackages &&
-					!fs.existsSync(`${process.cwd()}/${name}`)
-				);
-			},
+			message: "Do you wanna install the dependencies?",
+			default: true,
 		},
 	]);
-	return options.name;
+	if (options.install) {
+		installDependencies(getProjectPath(projectName));
+	}
 };
