@@ -1,8 +1,22 @@
 {
 	"name": "kickoff-react-app",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "a cli tool for generator react boilerplate",
-	"main": "index.js",
+	"author": "wjgogogo <906626481@qq.com>",
+	"homepage": "https://github.com/wjgogogo/kickoff-react-app#readme",
+	"keywords": [
+		"node",
+		"cli tool",
+		"react boilerplate"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wjgogogo/kickoff-react-app.git"
+	},
+	"bugs": {
+		"url": "https://github.com/wjgogogo/kickoff-react-app/issues"
+	},
+	"license": "MIT",
 	"scripts": {
 		"start": "ts-node src/index.ts",
 		"build": "tsc"
@@ -28,24 +42,13 @@
 			"git add"
 		]
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/wjgogogo/kickoff-react-app.git"
-	},
 	"engines": {
 		"node": ">=10"
 	},
-	"keywords": [
-		"node",
-		"cli tool",
-		"react boilerplate"
+	"files": [
+		"lib",
+		"bin"
 	],
-	"author": "bacteria369 <906626481@qq.com>",
-	"license": "MIT",
-	"homepage": "https://github.com/wjgogogo/kickoff-react-app#readme",
-	"bugs": {
-		"url": "https://github.com/wjgogogo/kickoff-react-app/issues"
-	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
 		"@commitlint/config-conventional": "^11.0.0",
