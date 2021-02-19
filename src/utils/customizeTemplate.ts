@@ -53,7 +53,9 @@ const customizePackageConfig = (
 const customizeTsConfig = (projectPath: string, options: Options) => {
 	modifyFile(`${projectPath}/tsconfig.json`, content => {
 		if (options.css !== "emotionjs") {
-			content = content.filter(i => !/(jsx)/.test(i));
+			content = content
+				.map(i => i.replace("react-jsx", "react"))
+				.filter(i => !/jsxImportSource/.test(i));
 		}
 
 		if (!options.unitTest) {
