@@ -1,5 +1,5 @@
 export const CLI_NAME = "kickoff-react-app";
-export const CLI_VERSION = "0.1.4";
+export const CLI_VERSION = "0.1.6";
 
 export const TEMPLATE_URL = "github:wjgogogo/kickoff-react-app#template";
 

@@ -26,7 +26,7 @@ npx kickoff-react-app create react-app
 npm i kickoff-react-app -g
 
 kickoff-react-app create react-app
-# or shorthand command: kra create react-app
+# or shorthand format: kra create react-app
 ```
 ![](./quick-view.gif)
 
