@@ -4,7 +4,6 @@
     "es2021": true
   },
   "extends": [
-    "airbnb-base",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "prettier/@typescript-eslint"
@@ -17,35 +16,10 @@
   "plugins": [
     "@typescript-eslint"
   ],
-  "settings": {
-    "import/extensions": [
-      ".ts",
-      ".js",
-      ".json"
-    ],
-    "import/resolver": {
-      "node": {
-        "extensions": [
-          ".ts",
-          ".js",
-          ".json"
-        ]
-      }
-    }
-  },
   "rules": {
     "no-shadow": "off",
     "no-console": "off",
-    "import/prefer-default-export": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "ts": "never"
-      }
-    ]
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }

@@ -1,7 +1,7 @@
 import { Command } from "commander";
 
 import { checkProjectName } from "./checkers";
-import { create } from "./createInquirer";
+import { create, useCreateInquirer } from "./create";
 
 export const addCreateCommand = (program: Command): void => {
 	program
@@ -10,7 +10,7 @@ export const addCreateCommand = (program: Command): void => {
 		.action((projectName: string) => {
 			checkProjectName(projectName);
 			console.log("success:", projectName);
-			create();
+			useCreateInquirer(projectName);
 		});
 };
 
@@ -18,9 +18,9 @@ export const addInitCommand = (program: Command): void => {
 	program
 		.command("init <project-name>")
 		.description(`quick generator a project from template`)
-
 		.action((projectName: string) => {
 			checkProjectName(projectName);
 			console.log("success:", projectName);
+			create(projectName);
 		});
 };
