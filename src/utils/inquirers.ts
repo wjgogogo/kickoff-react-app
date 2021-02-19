@@ -29,14 +29,17 @@ export const useProjectNameValidationInquirer = async (projectName: string) => {
 		{
 			name: "override",
 			type: "confirm",
-			message: `Do you want to override existed ${projectName} project?`,
+			message: `Do you want to override existed ${chalk.cyan.bold(
+				projectName
+			)} project?`,
 			default: false,
 		},
 		{
 			name: "name",
 			type: "text",
-			message:
-				"Please input new name (make sure name is valid and doesn't exist, otherwise it won't pass the question) :",
+			message: `Please input new name (make sure ${chalk.cyan(
+				"name is valid and doesn't exist"
+			)}, otherwise it won't pass the question) :`,
 			default: projectName,
 			when: answer => !answer.override,
 			validate(name: string) {
@@ -135,6 +138,6 @@ export const create = async (
 	commitProject(projectPath);
 	await useInstallInquirer(projectName);
 	console.log(
-		"\n" + chalk.green.bold("Success Create Project ,Happy hacking!") + "\n"
+		"\n" + chalk.green.bold("Success Create Project, Happy hacking!") + "\n"
 	);
 };
