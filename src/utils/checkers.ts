@@ -10,7 +10,7 @@ export const checkProjectName = (projectName: string) => {
 	const result = validate(projectName);
 	if (!result.validForNewPackages) {
 		console.error(
-			`can't create a project named ${chalk.green(
+			`Can't create a project named ${chalk.red.bold(
 				projectName
 			)}, because of npm naming restrictions:`
 		);
@@ -27,11 +27,11 @@ export const checkNodeVersion = (): void => {
 	const result = semver.satisfies(nodeVersion, range);
 
 	if (!result) {
-		console.log(
+		console.error(
 			chalk.red(
-				`you are using node ${nodeVersion}.\n` +
-					`kickoff-react-app requires node ${range}.\n` +
-					`please update your version of node.`
+				`You are using node ${chalk.cyan.bold(nodeVersion)}.\n` +
+					`Kickoff-React-App requires node ${chalk.cyan.bold(range)}.\n` +
+					`Please update your version of node.`
 			)
 		);
 		process.exit(1);
@@ -45,10 +45,11 @@ export const checkGitVersion = (): void => {
 			.toString()
 			.match(/(\d+.\d+.\d+)/)?.[0] as string;
 	} catch (error) {
-		console.log(
+		console.error(
 			chalk.red(
-				`kickoff-react-app requires git ${GIT_VERSION_RANGE}.\n` +
-					`please install git firstly.`
+				`Kickoff-React-App requires git ${chalk.cyan.bold(
+					GIT_VERSION_RANGE
+				)}, Please install git firstly.`
 			)
 		);
 		process.exit(1);
@@ -57,10 +58,13 @@ export const checkGitVersion = (): void => {
 	const result = semver.satisfies(gitVersion, GIT_VERSION_RANGE);
 
 	if (!result) {
-		console.log(
+		console.error(
 			chalk.red(
-				`kickoff-react-app requires git ${GIT_VERSION_RANGE}.\n` +
-					`please upgrade your git version.`
+				`You are using git ${chalk.cyan.bold(gitVersion)}.\n` +
+					`Kickoff-React-App requires git ${chalk.cyan.bold(
+						GIT_VERSION_RANGE
+					)}.\n` +
+					`Please upgrade your git version.`
 			)
 		);
 		process.exit(1);

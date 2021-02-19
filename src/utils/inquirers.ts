@@ -4,6 +4,8 @@ import { customizeTemplate } from "./customizeTemplate";
 import { commitProject, installDependencies } from "./exec";
 import { checkProjectName } from "./checkers";
 import * as fs from "fs";
+import ora from "ora";
+import chalk from "chalk";
 import validate from "validate-npm-package-name";
 
 export interface Options {
@@ -27,14 +29,14 @@ export const useProjectNameValidationInquirer = async (projectName: string) => {
 		{
 			name: "override",
 			type: "confirm",
-			message: `Do you wanna override existed project (${projectName} is exist) ?`,
+			message: `Do you want to override existed ${projectName} project?`,
 			default: false,
 		},
 		{
 			name: "name",
 			type: "text",
 			message:
-				"Please input new project name (make sure name is valid and doesn't exist, otherwise we won't pass this question) :",
+				"Please input new name (make sure name is valid and doesn't exist, otherwise it won't pass the question) :",
 			default: projectName,
 			when: answer => !answer.override,
 			validate(name: string) {
@@ -53,8 +55,9 @@ export const useCreateInquirer = async (projectName: string) => {
 		{
 			name: "css",
 			type: "list",
-			message:
-				"Choose a CSS pre-processor(PostCSS, Autoprefixer are supported by default):",
+			message: `Choose a CSS pre-processor (${chalk.cyan(
+				"PostCSS"
+			)}, ${chalk.cyan("Autoprefixer")} are supported by default) :`,
 			choices: [
 				{
 					name: "Less",
@@ -73,21 +76,25 @@ export const useCreateInquirer = async (projectName: string) => {
 		{
 			name: "unitTest",
 			type: "confirm",
-			message:
-				"Do you wanna add jest and @testing-library/react in your project?",
+			message: `Do you want to add ${chalk.cyan("jest")} and ${chalk.cyan(
+				"@testing-library/react"
+			)}?`,
 			default: true,
 		},
 		{
 			name: "lint",
 			type: "confirm",
-			message: "Do you wanna add lint and prettier in your project?",
+			message: `Do you want to add ${chalk.cyan("lint")} and ${chalk.cyan(
+				"prettier"
+			)}?`,
 			default: true,
 		},
 		{
 			name: "hook",
 			type: "confirm",
-			message:
-				"Do you wanna add pre-commit git hook to format your code in your project?",
+			message: `Do you want to add ${chalk.cyan(
+				"pre-commit"
+			)} git hook to format your code?`,
 			when: answer => answer.lint,
 			default: true,
 		},
@@ -95,31 +102,39 @@ export const useCreateInquirer = async (projectName: string) => {
 	await create(projectName, options);
 };
 
-export const create = async (
-	projectName: string,
-	options: Options = { css: "none", unitTest: false, lint: false, hook: false }
-) => {
-	const projectPath = getProjectPath(projectName);
-	try {
-		await downloadRepo(projectPath);
-	} catch (error) {
-		console.error(error);
-		process.exit(1);
-	}
-	customizeTemplate(projectPath, projectName, options);
-	commitProject(projectPath);
-};
-
 export const useInstallInquirer = async (projectName: string) => {
 	const options = await inquirer.prompt([
 		{
 			name: "install",
 			type: "confirm",
-			message: "Do you wanna install the dependencies?",
+			message: "Do you want to install the dependencies?",
 			default: true,
 		},
 	]);
 	if (options.install) {
 		installDependencies(getProjectPath(projectName));
 	}
+};
+
+export const create = async (
+	projectName: string,
+	options: Options = { css: "none", unitTest: false, lint: false, hook: false }
+) => {
+	const projectPath = getProjectPath(projectName);
+	const spinner = ora("Downloading Template...");
+	try {
+		spinner.start();
+		await downloadRepo(projectPath);
+		spinner.succeed("Download Successful");
+	} catch (error) {
+		spinner.fail("Download Failed");
+		console.error(error);
+		process.exit(1);
+	}
+	customizeTemplate(projectPath, projectName, options);
+	commitProject(projectPath);
+	await useInstallInquirer(projectName);
+	console.log(
+		"\n" + chalk.green.bold("Success Create Project ,Happy hacking!") + "\n"
+	);
 };
