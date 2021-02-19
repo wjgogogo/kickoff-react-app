@@ -7,7 +7,7 @@ on:
 jobs:
   publish:
     name: Publish
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
 
     steps:
       - name: Clone
@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: npm-cache-${{ runner.OS }}-${{ hashFiles('package-lock.json) }}
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('package-lock.json') }}
 
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -34,8 +34,10 @@ jobs:
 
       - name: Publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: npm publish
+          NPM_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+        run: |
+         npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+         npm publish
 
 
 
