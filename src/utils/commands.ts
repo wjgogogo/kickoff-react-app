@@ -1,7 +1,7 @@
 import { Command } from "commander";
 
 import { checkProjectName } from "./checkers";
-import { create, useCreateInquirer } from "./create";
+import { create, useCreateInquirer } from "./inquirers";
 
 export const addCreateCommand = (program: Command): void => {
 	program

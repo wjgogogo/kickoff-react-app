@@ -1,22 +1,33 @@
 import * as fs from "fs";
 
-import { Options } from "./create";
+import { Options } from "./inquirers";
 
-export const customizeTemplate = (projectPath: string, options: Options) => {
-	customizePackageConfig(projectPath, options);
+export const customizeTemplate = (
+	projectPath: string,
+	projectName: string,
+	options: Options
+) => {
+	customizePackageConfig(projectPath, projectName, options);
 	customizeTsConfig(projectPath, options);
 	customizeBabelConfig(projectPath, options);
 	customizeWebpackConfig(projectPath, options);
 	customizeTestConfig(projectPath, options);
 	customizeEslintConfig(projectPath, options);
+	customizeDocument(projectPath, projectName);
 };
 
-const customizePackageConfig = (projectPath: string, options: Options) => {
+const customizePackageConfig = (
+	projectPath: string,
+	projectName: string,
+	options: Options
+) => {
 	modifyFile(`${projectPath}/package.json`, content => {
+		content = content.map(i => i.replace(/PROJECT_NAME/, projectName));
+
 		if (!options.hook) {
-			// hook config start from line 15 and end at line 29
+			// hook config start from line 16 and end at line 30
 			content = content
-				.filter((_, line) => line < 14 || line > 28)
+				.filter((_, line) => line < 15 || line > 29)
 				.filter(i => !/(husky|lint-staged)/.test(i));
 		}
 
@@ -110,6 +121,13 @@ const customizeEslintConfig = (projectPath: string, options: Options) => {
 			content = content.filter(i => !/jest/.test(i));
 		}
 
+		return content;
+	});
+};
+
+const customizeDocument = (projectPath: string, projectName: string) => {
+	modifyFile(`${projectPath}/README.md`, content => {
+		content = content.map(i => i.replace(/PROJECT_NAME/, projectName));
 		return content;
 	});
 };
