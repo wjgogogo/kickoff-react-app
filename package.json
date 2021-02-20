@@ -22,8 +22,8 @@
 		"build": "tsc"
 	},
 	"bin": {
-		"kickoff-react-app": "./bin/kra",
-		"kra": "./bin/kra"
+		"kickoff-react-app": "./bin/kra.js",
+		"kra": "./bin/kra.js"
 	},
 	"husky": {
 		"hooks": {
