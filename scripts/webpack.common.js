@@ -88,19 +88,21 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|jpeg|svg)$/,
-        loader: "url-loader",
-        options: {
-          limit: 10 * 1024,
-          outputPath: "images",
-          name: "[name].[contenthash:8].[ext]",
+        type: "asset",
+        generator: {
+          filename: "images/[name].[contenthash:8][ext]",
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10 * 1024,
+          },
         },
       },
       {
         test: /\.(woff|woff2|e0t|ttf|otf)$/,
-        loader: "file-loader",
-        options: {
-          outputPath: "fonts",
-          name: "[name].[contenthash:8].[ext]",
+        type: "asset/resource",
+        generator: {
+          filename: "fonts/[name].[contenthash:8][ext]",
         },
       },
     ],
